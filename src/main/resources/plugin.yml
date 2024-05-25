@@ -4,6 +4,6 @@ main: me.marco.tribos.Tribos
 api-version: '1.20'
 commands:
   tribe:
-    description: 'Create a tribe'
-    usage: '/tribe create <tribeName>'
+    description: 'Tribe Command'
+    usage: '/tribe'
     aliases: []
