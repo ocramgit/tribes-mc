@@ -1,0 +1,9 @@
+name: Tribos
+version: '${project.version}'
+main: me.marco.tribos.Tribos
+api-version: '1.20'
+commands:
+  tribe:
+    description: 'Create a tribe'
+    usage: '/tribe create <tribeName>'
+    aliases: []
