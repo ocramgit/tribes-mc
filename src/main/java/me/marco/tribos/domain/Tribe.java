@@ -19,6 +19,9 @@ public class Tribe {
         this.level = level;
     }
 
+    public Tribe() {
+    }
+
     public Long getMoney() {
         return money;
     }

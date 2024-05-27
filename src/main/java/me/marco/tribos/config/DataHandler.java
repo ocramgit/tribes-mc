@@ -1,6 +1,7 @@
 package me.marco.tribos.config;
 
 import me.marco.tribos.domain.Tribe;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class DataHandler {
     private final JavaPlugin plugin;
@@ -54,19 +56,34 @@ public class DataHandler {
     }
 
     public void setTribeCreation(Player p, Tribe tribe) {
-        config.set("tribos." + ".triboNome", tribe.getName());
-        config.set("tribos." + ".owner", p.getDisplayName());
-        config.set("tribos." + ".money", tribe.getMoney());
-        config.set("tribos." + ".level", tribe.getLevel());
-        config.set("tribos." + ".members", tribe.getMembers());
+        String name = tribe.getName();
+        config.set("tribos." + name + ".triboNome", name);
+        config.set("tribos." + name + ".owner", p.getDisplayName());
+        config.set("tribos." + name + ".money", tribe.getMoney());
+        config.set("tribos." + name + ".level", tribe.getLevel());
+        config.set("tribos." + name + ".members", tribe.getMembers());
         saveConfig();
     }
 
+
     public String getPlayerTribe(String playerName) {
-        return config.getString("tribos." + playerName);
+        return config.getString("tribos.owner" + playerName);
     }
 
-    public String getPlayerRole(String playerName) {
-        return config.getString("tribos." + playerName + ".role");
+    public Tribe loadTribe(String tribeName) {
+        ConfigurationSection tribeSection = config.getConfigurationSection("tribos." + tribeName);
+
+        if (tribeSection == null) {
+            return null;
+        }
+
+        String name = tribeSection.getString("triboNome");
+        Long money = tribeSection.getLong("money");
+
+        Tribe tribe = new Tribe();
+        tribe.setName(name);
+        tribe.setMoney(money);
+
+        return tribe;
     }
 }

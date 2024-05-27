@@ -35,6 +35,12 @@ public class CreateTribe implements CommandExecutor {
                 player.sendMessage("Tu já pertences a uma tribo.");
             }
 
+                if(params.length > 1 && params[0].equals("ver")) {
+                    Tribe tribe = dataHandler.loadTribe(params[1]);
+
+                    player.sendMessage("Name: " + tribe.getName() + "\n" + "Money: " + tribe.getMoney());
+                }
+
             return true;
         }
         return true;
