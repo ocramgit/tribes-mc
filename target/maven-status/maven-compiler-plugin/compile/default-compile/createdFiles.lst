@@ -1,0 +1,5 @@
+me/marco/tribos/Tribos.class
+me/marco/tribos/domain/Tribe.class
+me/marco/tribos/commands/CreateTribe.class
+me/marco/tribos/events/ChatListenerEvent.class
+me/marco/tribos/config/DataHandler.class

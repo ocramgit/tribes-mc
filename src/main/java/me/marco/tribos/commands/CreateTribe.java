@@ -2,6 +2,7 @@ package me.marco.tribos.commands;
 
 import me.marco.tribos.config.DataHandler;
 import me.marco.tribos.domain.Tribe;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,24 +23,37 @@ public class CreateTribe implements CommandExecutor {
 
             Player player = (Player) commandSender;
 
-            if (dataHandler.getPlayerTribe(player.getDisplayName()) == null) {
                 if (params.length == 2 && params[0].equalsIgnoreCase("criar")) {
+
+                    if (dataHandler.playerAlreadyHaveATribe(player.getDisplayName())) {
+                        player.sendMessage("Tu já pertences a uma tribo.");
+                        return false;
+                    }
+
                     String tribeName = params[1];
                     Tribe tribe = new Tribe(tribeName, player, List.of(player), 1500L, 0);
                     player.sendMessage("Criaste a tribo: " + tribeName);
                     dataHandler.setTribeCreation(player, tribe);
-                } else {
-                    player.sendMessage("Uso incorreto do comando. Use: /tribo criar <nome>");
                 }
-            } else {
-                player.sendMessage("Tu já pertences a uma tribo.");
-            }
 
                 if(params.length > 1 && params[0].equals("ver")) {
                     Tribe tribe = dataHandler.loadTribe(params[1]);
 
-                    player.sendMessage("Name: " + tribe.getName() + "\n" + "Money: " + tribe.getMoney());
+                    if (tribe == null) {
+                        player.sendMessage("A tribo " + params[1] + " não existe.");
+                        return false;
+                    }
+
+                    player.sendMessage("Name: " + ChatColor.GRAY + tribe.getName() + "\n" + ChatColor.WHITE + "Money: " + ChatColor.GRAY + tribe.getMoney());
                 }
+
+            if(params.length >= 1 && params[0].equals("eliminar")) {
+                    String tribeName = dataHandler.getTribeByPlayerName(player.getDisplayName());
+                    Tribe tribe = dataHandler.loadTribe(tribeName);
+
+                    dataHandler.deleteTribe(tribe);
+                    player.sendMessage("Tribo eliminada.");
+            }
 
             return true;
         }

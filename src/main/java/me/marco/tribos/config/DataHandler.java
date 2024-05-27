@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class DataHandler {
     private final JavaPlugin plugin;
@@ -65,10 +64,44 @@ public class DataHandler {
         saveConfig();
     }
 
+    public String getTribeByPlayerName(String playerName) {
+        ConfigurationSection tribesSection = config.getConfigurationSection("tribos");
 
-    public String getPlayerTribe(String playerName) {
-        return config.getString("tribos.owner" + playerName);
+        if (tribesSection == null) {
+            return null;
+        }
+
+        for (String tribeKey : tribesSection.getKeys(false)) {
+            ConfigurationSection tribeSection = tribesSection.getConfigurationSection(tribeKey);
+
+            if (tribeSection != null) {
+                String owner = tribeSection.getString("owner");
+
+                if (playerName.equals(owner)) {
+                    return tribeSection.getString("triboNome");
+                }
+            }
+        }
+
+        return null;
     }
+
+    public boolean playerAlreadyHaveATribe(String playerName) {
+        ConfigurationSection tribosSection = config.getConfigurationSection("tribos");
+        if (tribosSection == null) {
+            return false;
+        }
+
+        for (String tribeKey : tribosSection.getKeys(false)) {
+            String owner = tribosSection.getString(tribeKey + ".owner");
+            if (playerName.equals(owner)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public Tribe loadTribe(String tribeName) {
         ConfigurationSection tribeSection = config.getConfigurationSection("tribos." + tribeName);
@@ -85,5 +118,14 @@ public class DataHandler {
         tribe.setMoney(money);
 
         return tribe;
+    }
+
+    public void deleteTribe(Tribe tribe) {
+        String tribeName = tribe.getName();
+        if (config.contains("tribos." + tribeName)) {
+            config.set("tribos." + tribeName, null);
+            saveConfig();
+            plugin.getLogger().info("Tribo '" + tribeName + "' foi deletada com sucesso.");
+        }
     }
 }

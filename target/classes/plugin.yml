@@ -1,0 +1,9 @@
+name: Tribos
+version: '1.0-SNAPSHOT'
+main: me.marco.tribos.Tribos
+api-version: '1.20'
+commands:
+  tribo:
+    description: 'Comando da tribo'
+    usage: '/tribo'
+    aliases: []

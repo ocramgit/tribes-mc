@@ -17,10 +17,13 @@ public class ChatListenerEvent implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        String tribe = dataHandler.getPlayerTribe(player.getDisplayName());
+        String tribe = dataHandler.getTribeByPlayerName(player.getDisplayName());
 
         if (tribe != null) {
-            String format = ChatColor.GRAY +  "[" + tribe + "] " + ChatColor.WHITE + player.getDisplayName() + ": " + ChatColor.GRAY + event.getMessage();
+            String format = ChatColor.LIGHT_PURPLE +  "[" + tribe + "] " + ChatColor.WHITE + player.getDisplayName() + ": " + ChatColor.GRAY + event.getMessage();
+            event.setFormat(format);
+        } else {
+            String format = ChatColor.GRAY +  "[" + "Membro" + "] " + ChatColor.WHITE + player.getDisplayName() + ": " + ChatColor.GRAY + event.getMessage();
             event.setFormat(format);
         }
     }
